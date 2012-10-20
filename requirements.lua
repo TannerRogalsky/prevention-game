@@ -36,6 +36,8 @@ cron = require 'lib/cron'
 
 require 'base'
 require 'game'
+require 'egg'
+require 'sperm'
 
 require 'states/loading'
 require 'states/main'
