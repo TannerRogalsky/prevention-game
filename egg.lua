@@ -4,8 +4,6 @@ Egg.static.GROWTH_MULTIPLIER = 5
 function Egg:initialize(x, y, radius)
   Base.initialize(self)
 
-  -- self._physics_body = game.collider:addCircle(self.pos.x, self.pos.y, self.radius)
-  -- self._physics_body.parent = self
   self._physics_body = love.physics.newBody(game.world, x, y, "dynamic")
   self._shape = love.physics.newCircleShape(radius)
   self._fixture = love.physics.newFixture(self._physics_body, self._shape)
