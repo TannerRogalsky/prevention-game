@@ -4,10 +4,12 @@ Egg.static.GROWTH_MULTIPLIER = 5
 function Egg:initialize(x, y, radius)
   Base.initialize(self)
 
-  self._physics_body = love.physics.newBody(game.world, x, y, "dynamic")
-  self._shape = love.physics.newCircleShape(radius)
-  self._fixture = love.physics.newFixture(self._physics_body, self._shape)
-  self._fixture:setUserData(self)
+  self.pos = {x = x, y = y}
+  self.pos.incr = function(self, k, v) self[k] = self[k] + v end
+  self.radius = radius
+
+  self._physics_body = game.collider:addCircle(self.pos.x, self.pos.y, self.radius)
+  self._physics_body.parent = self
 end
 
 function Egg:update(dt)
@@ -16,23 +18,21 @@ end
 
 function Egg:render()
   g.setColor(COLORS.RED:rgb())
-  local x, y = self._physics_body:getPosition()
-  g.circle("fill", x, y, self._shape:getRadius())
+  self._physics_body:draw("fill")
 end
 
 function Egg:grow(dt)
-  self._fixture:destroy()
-  local radius = self._shape:getRadius() + dt * Egg.GROWTH_MULTIPLIER
-  self._shape = love.physics.newCircleShape(radius)
-  self._fixture = love.physics.newFixture(self._physics_body, self._shape)
-  self._fixture:setUserData(self)
+  self.radius = self.radius + dt * Egg.GROWTH_MULTIPLIER
+  self._physics_body._radius = self.radius
 end
 
-function Egg:clean()
-  self._fixture:destroy()
-  self._physics_body:destroy()
+function Egg:move(x, y)
+  self.pos:incr('x', x)
+  self.pos:incr('y', y)
+  self._physics_body:move(x,y)
 end
 
 function Egg:move_to(x, y)
-  self._physics_body:setPosition(x,y)
+  self.pos = {x = x, y = y}
+  self._physics_body:moveTo(x,y)
 end
