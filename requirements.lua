@@ -18,8 +18,10 @@ COLORS.PURPLE = {r = 255, g = 0,   b = 255, a = 255}
 -- The pixel grid is actually offset to the center of each pixel. So to get clean pixels drawn use 0.5 + integer increments.
 g.setPoint(2.5, "rough")
 math.randomseed(os.time())
+r = math.random
 function math.round(n, deci) deci = 10^(deci or 0) return math.floor(n*deci+.5)/deci end
 function math.clamp(low, n, high) return math.min(math.max(low, n), high) end
+function math.dist(x1, y1, x2, y2) return math.sqrt(math.pow(x2 - x1, 2) + math.pow(y2 - y1, 2)) end
 function pointInCircle(circle, point) return (point.x-circle.x)^2 + (point.y - circle.y)^2 < circle.radius^2 end
 function string:split(sep) return self:match((self:gsub("[^"..sep.."]*"..sep, "([^"..sep.."]*)"..sep))) end
 globalID = 0
@@ -38,6 +40,14 @@ require 'base'
 require 'game'
 require 'egg'
 require 'sperm'
+require 'power_up'
+require 'ui_box'
+
+for _,file in ipairs(love.filesystem.enumerate('powerups')) do
+  if file:match('(.*).lua$') then
+    require("powerups/"..file:gsub(".lua", ""))
+  end
+end
 
 require 'states/loading'
 require 'states/main'
