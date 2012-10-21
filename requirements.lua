@@ -43,11 +43,8 @@ require 'sperm'
 require 'power_up'
 require 'ui_box'
 
-for _,file in ipairs(love.filesystem.enumerate('powerups')) do
-  if file:match('(.*).lua$') then
-    require("powerups/"..file:gsub(".lua", ""))
-  end
-end
+require 'powerups/staple'
+PowerUp.static.TYPES = {Staple, Confusion, Wall, Bubble, Slow, Decoy}
 
 require 'states/loading'
 require 'states/main'

@@ -3,12 +3,14 @@ PowerUp = class('PowerUp', Base)
 function PowerUp:initialize(x, y, width, height)
   Base.initialize(self)
 
-  self.pos = {x = x, y = y}
-  self.pos.incr = function(self, k, v) self[k] = self[k] + v end
-  self.dimensions = {w = width, h = height}
+  if x and y and width and height then
+    self.pos = {x = x, y = y}
+    self.pos.incr = function(self, k, v) self[k] = self[k] + v end
+    self.dimensions = {w = width, h = height}
 
-  self._physics_body = game.collider:addRectangle(self.pos.x, self.pos.y, self.dimensions.w, self.dimensions.h)
-  self._physics_body.parent = self
+    self._physics_body = game.collider:addRectangle(self.pos.x, self.pos.y, self.dimensions.w, self.dimensions.h)
+    self._physics_body.parent = self
+  end
 end
 
 function PowerUp:update(dt)

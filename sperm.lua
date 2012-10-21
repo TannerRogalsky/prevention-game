@@ -18,6 +18,8 @@ end
 
 function Sperm:update(dt)
   self.anim:update(dt)
+  if self.stapled then return end
+
   local target = nil
   if game.egg then
     target = game.egg

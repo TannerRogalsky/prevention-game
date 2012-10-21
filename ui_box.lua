@@ -1,10 +1,11 @@
 UIBox = class('UIBox', Base)
 
-function UIBox:initialize(game, x, y, width, height)
+function UIBox:initialize(game, x, y, width, height, clicked_callback)
   Base.initialize(self)
 
   self.pos = {x = x, y = y}
   self.dimensions = {w = width, h = height}
+  self.clicked_callback = clicked_callback
 
   self.outline_color = COLORS.WHITE
 
@@ -17,10 +18,6 @@ function UIBox:update(dt)
 end
 
 function UIBox:render()
-  g.setColor(13,231,124)
-  g.rectangle("fill", self.pos.x, self.pos.y, self.dimensions.w, self.dimensions.h)
-  g.setColor(self.outline_color:rgb())
-  g.rectangle("line", self.pos.x, self.pos.y, self.dimensions.w, self.dimensions.h)
 end
 
 function UIBox:contains(x, y)
@@ -29,6 +26,7 @@ end
 
 function UIBox:select()
   self.outline_color = COLORS.YELLOW
+  self:clicked_callback()
 end
 
 function UIBox:on_collide(dt, shape_one, shape_two, mtv_x, mtv_y)

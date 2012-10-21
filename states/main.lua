@@ -8,7 +8,7 @@ function Main:enteredState()
   self.score = 0
   self.background = self.preloaded_image["background.png"]
 
-  self:make_item_boxes(7)
+  self:make_item_boxes(6)
 end
 
 function Main:update(dt)
@@ -91,7 +91,7 @@ function Main:mousereleased(x, y, button)
     self.collider:remove(self.egg._physics_body)
     cron.cancel(self.egg.power_spawn)
     self.egg = nil
- end
+  end
 end
 
 function Main:keypressed(key, unicode)
@@ -161,11 +161,33 @@ end
 
 function Main:make_item_boxes(count)
   local w,h = g.getMode()
-  local b_size = w / 7
+  local b_size = w / count
   self.item_boxes = {}
 
+  local click = function(ui_box)
+    ui_box.powerup:effect()
+  end
+
+  local render = function(ui_box)
+    g.setColor(ui_box.outline_color:rgb())
+    if ui_box.powerup then
+      ui_box.powerup:render(ui_box.pos.x, ui_box.pos.y, ui_box.dimensions.w, ui_box.dimensions.h)
+    else
+      g.rectangle("fill", ui_box.pos.x, ui_box.pos.y, ui_box.dimensions.w, ui_box.dimensions.h)
+    end
+    g.setColor(ui_box.outline_color:rgb())
+    g.rectangle("line", ui_box.pos.x, ui_box.pos.y, ui_box.dimensions.w, ui_box.dimensions.h)
+  end
+
+  print(unpack(PowerUp.TYPES))
   for i=0,count - 1 do
-    table.insert(self.item_boxes, UIBox:new(self, i * b_size, h - b_size, b_size, b_size))
+    local ui_box = UIBox:new(self, i * b_size, h - b_size, b_size, b_size, click)
+    ui_box.num = i
+    ui_box.render = render
+    if PowerUp.TYPES[i + 1] then
+      ui_box.powerup = PowerUp.TYPES[i + 1]:new()
+    end
+    table.insert(self.item_boxes, ui_box)
   end
 end
 
