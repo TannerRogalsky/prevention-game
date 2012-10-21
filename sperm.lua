@@ -9,11 +9,15 @@ function Sperm:initialize(x, y, radius)
   self.angle = 0
   self.speed = 1.5
 
+  -- self.anim = newAnimation(game.preloaded_image["sperm_small.png"], 20, 60, 0.2, 4)
+  self.anim = newAnimation(game.preloaded_image["sperm.png"], 300, 900, 0.2, 4)
+
   self._physics_body = game.collider:addCircle(self.pos.x, self.pos.y, self.radius)
   self._physics_body.parent = self
 end
 
 function Sperm:update(dt)
+  self.anim:update(dt)
   local target = nil
   if game.egg then
     target = game.egg
@@ -56,11 +60,15 @@ function Sperm:update(dt)
 end
 
 function Sperm:render()
-  g.setColor(COLORS.BLUE:rgb())
-  self._physics_body:draw("fill")
-  local x = self.pos.x + (self.radius  + 50) * -math.cos(self.angle)
-  local y = self.pos.y + (self.radius  + 50) * -math.sin(self.angle)
-  g.line(self.pos.x, self.pos.y, x, y)
+  -- g.setColor(COLORS.BLUE:rgb())
+  -- self._physics_body:draw("fill")
+  -- local x = self.pos.x + (self.radius  + 50) * -math.cos(self.angle)
+  -- local y = self.pos.y + (self.radius  + 50) * -math.sin(self.angle)
+  -- g.line(self.pos.x, self.pos.y, x, y)
+
+  g.setColor(255,255,255)
+  local scale = self.radius * 2 / self.anim.img:getWidth() * #self.anim.frames
+  self.anim:draw(self.pos.x, self.pos.y, self.angle + math.pi / 2, scale, scale, self.radius, self.radius)
 end
 
 function Sperm:move(x, y)

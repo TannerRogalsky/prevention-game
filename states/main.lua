@@ -6,6 +6,8 @@ function Main:enteredState()
   self.sperm = {}
   self.powerups = {}
   self.score = 0
+  self.background = self.preloaded_image["background.png"]
+
   self:make_item_boxes(7)
 end
 
@@ -30,6 +32,8 @@ end
 
 function Main:render()
   self.camera:set()
+
+  g.draw(self.background, 0, 0, 0, 0.5, 0.5)
 
   for id,powerup in pairs(self.powerups) do
     powerup:render()

@@ -12,6 +12,11 @@ function Egg:initialize(x, y, radius)
   self._physics_body = game.collider:addCircle(self.pos.x, self.pos.y, self.start_radius)
   self._physics_body.parent = self
 
+  self.image = game.preloaded_image["egg.png"]
+  -- self.imageq = love.graphics.newQuad(0, 0, 300, 300, self.image:getWidth(), self.image:getHeight())
+  self.anim = newAnimation(game.preloaded_image["egg.png"], 300, 300, 0.1, 10)
+  self.anim:setMode("bounce")
+
   self.power_spawn = cron.every(1.5, function()
     local new_powerup = PowerUp:new(r(g.getWidth()), r(g.getHeight()), 15, 15)
     game.powerups[new_powerup.id] = new_powerup
@@ -21,11 +26,17 @@ end
 function Egg:update(dt)
   self.alive = self.alive + dt
   self:grow(dt)
+  self.anim:update(dt)
 end
 
 function Egg:render()
-  g.setColor(COLORS.RED:rgb())
-  self._physics_body:draw("fill")
+  -- g.setColor(COLORS.RED:rgb())
+  -- self._physics_body:draw("fill")
+
+  g.setColor(COLORS.WHITE:rgb())
+  -- g.drawq(self.image, self.imageq, self.pos.x - self.radius, self.pos.y - self.radius, 0, self.radius * 2 / 300, self.radius * 2 / 300)
+  local scale = self.radius * 2 / self.anim.img:getWidth() * #self.anim.frames
+  self.anim:draw(self.pos.x - self.radius, self.pos.y - self.radius, 0, scale, scale)
 end
 
 function Egg:grow(dt)
