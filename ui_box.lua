@@ -26,6 +26,11 @@ end
 
 function UIBox:select()
   self.outline_color = COLORS.YELLOW
+  for _,ui_box in ipairs(game.item_boxes) do
+    if self ~= ui_box then
+      ui_box.outline_color = COLORS.WHITE
+    end
+  end
   self:clicked_callback()
 end
 

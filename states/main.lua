@@ -33,6 +33,7 @@ end
 function Main:render()
   self.camera:set()
 
+  g.setColor(COLORS.WHITE:rgb())
   g.draw(self.background, 0, 0, 0, 0.5, 0.5)
 
   for id,powerup in pairs(self.powerups) do
@@ -68,11 +69,6 @@ function Main:mousepressed(x, y, button)
   for i,ui_box in ipairs(self.item_boxes) do
     if ui_box:contains(x, y) then
       ui_box:select()
-      for j,ui_box in ipairs(self.item_boxes) do
-        if i ~= j then
-          ui_box.outline_color = COLORS.WHITE
-        end
-      end
       break
     end
   end
@@ -95,9 +91,13 @@ function Main:mousereleased(x, y, button)
 end
 
 function Main:keypressed(key, unicode)
-  local w,h = love.graphics.getMode()
-  local new_sperm = Sperm:new(r(w), r(h), 10)
-  self.sperm[new_sperm.id] = new_sperm
+  if self.item_boxes[tonumber(key)] then
+    self.item_boxes[tonumber(key)]:select()
+  else
+    local w,h = love.graphics.getMode()
+    local new_sperm = Sperm:new(r(w), r(h), 10)
+    self.sperm[new_sperm.id] = new_sperm
+  end
 end
 
 function Main:keyreleased(key, unicode)
@@ -141,8 +141,16 @@ function Main:ui_overlay()
   g.arc("fill", g.getWidth(), 0, 95, math.rad(180), math.rad(90))
   g.setColor(COLORS.PURPLE:rgb())
   g.arc("fill", g.getWidth(), 0, 95, math.rad(180), math.rad(180 - (self.score % 100 * 0.9)))
+
   g.setColor(COLORS.BLACK:rgb())
-  g.circle("fill", g.getWidth(), 0, 95 - 10)
+  g.arc("fill", g.getWidth(), 0, 95 - 10, math.rad(180), math.rad(90))
+  if self.active_item then
+    g.setColor(COLORS.WHITE:rgb())
+    g.draw(self.active_item, 0, 0)
+  end
+
+
+  -- g.circle("fill", g.getWidth(), 0, 95 - 10)
 
   -- bottom boxes
   for i,ui_box in ipairs(self.item_boxes) do
@@ -165,30 +173,53 @@ function Main:make_item_boxes(count)
   self.item_boxes = {}
 
   local click = function(ui_box)
-    ui_box.powerup:effect()
+    local powerup = ui_box.powerup
+    game.active_item = new_textured_circle(powerup.image, g.getWidth(), 0, 85, 0, 0.2, 0.2, 85 * 4)
+    powerup:effect()
   end
 
   local render = function(ui_box)
+    g.setColor(COLORS.BLACK:rgb())
+    g.rectangle("fill", ui_box.pos.x, ui_box.pos.y, ui_box.dimensions.w, ui_box.dimensions.h)
     g.setColor(ui_box.outline_color:rgb())
-    if ui_box.powerup then
-      ui_box.powerup:render(ui_box.pos.x, ui_box.pos.y, ui_box.dimensions.w, ui_box.dimensions.h)
-    else
-      g.rectangle("fill", ui_box.pos.x, ui_box.pos.y, ui_box.dimensions.w, ui_box.dimensions.h)
-    end
-    g.setColor(ui_box.outline_color:rgb())
+    ui_box.powerup:render(ui_box.pos.x, ui_box.pos.y, ui_box.dimensions.w, ui_box.dimensions.h)
     g.rectangle("line", ui_box.pos.x, ui_box.pos.y, ui_box.dimensions.w, ui_box.dimensions.h)
   end
 
-  print(unpack(PowerUp.TYPES))
   for i=0,count - 1 do
     local ui_box = UIBox:new(self, i * b_size, h - b_size, b_size, b_size, click)
-    ui_box.num = i
     ui_box.render = render
-    if PowerUp.TYPES[i + 1] then
-      ui_box.powerup = PowerUp.TYPES[i + 1]:new()
-    end
+    ui_box.powerup = PowerUp.TYPES[i + 1]:new(self)
     table.insert(self.item_boxes, ui_box)
   end
+end
+
+function new_textured_circle(img, x, y, radius, orientation, scale_x, scale_y, offset_x, offset_y)
+    -- Set up and store our clipped canvas once as it's expensive
+    local canvas = love.graphics.newCanvas()
+    g.setColor(COLORS.WHITE:rgb())
+    g.setCanvas(canvas)
+
+    -- Our clipping function, we want to render within a polygon shape
+    local myStencilFunction = function()
+      g.circle("fill", x, y, radius)
+    end
+    g.setStencil(myStencilFunction)
+
+    -- Setting to premultiplied means that pixels just get overlaid ignoring
+    -- their alpha values. Then when we render this canvas object itself, we
+    -- will use the alpha of the canvas itself
+    g.setBlendMode("premultiplied")
+
+    -- Draw the repeating image within the quad
+    g.draw(img, x, y, orientation, scale_x, scale_y, offset_x, offset_y)
+
+    -- Reset everything back to normal
+    g.setBlendMode("alpha")
+    g.setStencil()
+    g.setCanvas()
+
+    return canvas
 end
 
 return Main

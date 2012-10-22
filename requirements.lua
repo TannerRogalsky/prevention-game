@@ -44,6 +44,11 @@ require 'power_up'
 require 'ui_box'
 
 require 'powerups/staple'
+require 'powerups/confusion'
+require 'powerups/wall'
+require 'powerups/bubble'
+require 'powerups/slow'
+require 'powerups/decoy'
 PowerUp.static.TYPES = {Staple, Confusion, Wall, Bubble, Slow, Decoy}
 
 require 'states/loading'

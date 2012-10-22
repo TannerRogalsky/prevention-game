@@ -1,14 +1,16 @@
 Staple = class('Staple', PowerUp)
 
-function Staple:initialize()
+function Staple:initialize(game)
   PowerUp.initialize(self)
+
+  self.image = game.preloaded_image["icon_1.png"]
 end
 
 function Staple:update(dt)
 end
 
 function Staple:render(x, y, w, h)
-  local img = game.preloaded_image["icon_1.png"]
+  local img = self.image
   local iw, ih = img:getWidth(), img:getHeight()
   g.draw(img, x, y, w / iw, h / ih)
 end
