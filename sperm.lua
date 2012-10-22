@@ -92,6 +92,8 @@ function Sperm:on_collide(dt, shape_one, shape_two, mtv_x, mtv_y)
     self:move(mtv_x, mtv_y)
   elseif instanceOf(Egg, other_object) then
     game.over = true
+    other_object.anim = newAnimation(game.preloaded_image["dead.png"], 300, 300, 0.1, 10)
+    other_object.anim:setMode("once")
   elseif instanceOf(PowerUp, other_object) and game.egg == nil then
     game.collider:remove(other_object._physics_body)
     game.powerups[other_object.id] = nil

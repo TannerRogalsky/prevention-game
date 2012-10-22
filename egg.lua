@@ -18,7 +18,7 @@ function Egg:initialize(x, y, radius)
   self.anim:setMode("bounce")
 
   self.power_spawn = cron.every(1.5, function()
-    local new_powerup = PowerUp:new(r(g.getWidth()), r(g.getHeight()), 15, 15)
+    local new_powerup = PowerUp:new(r(g.getWidth()), r(g.getHeight()), 40, 40)
     game.powerups[new_powerup.id] = new_powerup
   end)
 end

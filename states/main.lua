@@ -12,7 +12,10 @@ function Main:enteredState()
 end
 
 function Main:update(dt)
-  if game.over then return end
+  if game.over then
+    self.egg.anim:update(dt)
+    return
+  end
 
   cron.update(dt)
   self.collider:update(dt)

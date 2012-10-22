@@ -7,18 +7,26 @@ function PowerUp:initialize(x, y, width, height)
     self.pos = {x = x, y = y}
     self.pos.incr = function(self, k, v) self[k] = self[k] + v end
     self.dimensions = {w = width, h = height}
+    self.radius = width / 2
 
-    self._physics_body = game.collider:addRectangle(self.pos.x, self.pos.y, self.dimensions.w, self.dimensions.h)
+    self.image = game.preloaded_image["powerup.png"]
+    self.anim = newAnimation(self.image, 325, 325, 0.4, 6)
+    self.anim:setMode("bounce")
+
+    self._physics_body = game.collider:addCircle(self.pos.x, self.pos.y, self.radius)
     self._physics_body.parent = self
   end
 end
 
 function PowerUp:update(dt)
+  self.anim:update(dt)
 end
 
 function PowerUp:render()
-  g.setColor(COLORS.GREEN:rgb())
-  self._physics_body:draw("fill")
+  g.setColor(COLORS.WHITE:rgb())
+  -- self._physics_body:draw("fill")
+  local scale = self.dimensions.w / self.anim.img:getWidth() * #self.anim.frames
+  self.anim:draw(self.pos.x - self.radius, self.pos.y - self.radius, 0, scale, scale)
 end
 
 function PowerUp:effect()
