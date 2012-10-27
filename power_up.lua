@@ -30,7 +30,11 @@ function PowerUp:render()
 end
 
 function PowerUp:effect()
+  local prev_mod = game.score % 100
   game.score = game.score + 5
+  if prev_mod > game.score % 100 then
+    game.staples = game.staples + 1
+  end
 end
 
 function PowerUp:contains(x, y)

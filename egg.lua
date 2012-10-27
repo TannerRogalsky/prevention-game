@@ -41,7 +41,11 @@ end
 
 function Egg:grow(dt)
   self.radius = self.start_radius + math.pow(self.alive, Egg.GROWTH_EXPONENT)
+  local prev_mod = game.score % 100
   game.score = game.score + self.radius * 0.02
+  if prev_mod > game.score % 100 then
+    game.staples = game.staples + 1
+  end
   self._physics_body._radius = self.radius
 end
 

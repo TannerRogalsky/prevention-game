@@ -6,9 +6,20 @@ function Main:enteredState()
   self.sperm = {}
   self.powerups = {}
   self.score = 0
+  self.staples = 0
+  self.active_item = new_textured_circle(self.preloaded_image["icon_1.png"], g.getWidth(), 0, 85, 0, 0.2, 0.2, 85 * 4)
   self.background = self.preloaded_image["background.png"]
 
   self:make_item_boxes(6)
+
+
+  local w,h = love.graphics.getMode()
+  local function new_sperm()
+    local new_sperm = Sperm:new(r(w), r(h), 10)
+    self.sperm[new_sperm.id] = new_sperm
+  end
+  cron.after(4, new_sperm)
+  cron.every(12, new_sperm)
 end
 
 function Main:update(dt)
@@ -69,12 +80,12 @@ function Main:mousepressed(x, y, button)
     end
   end
 
-  for i,ui_box in ipairs(self.item_boxes) do
-    if ui_box:contains(x, y) then
-      ui_box:select()
-      break
-    end
-  end
+  -- for i,ui_box in ipairs(self.item_boxes) do
+  --   if ui_box:contains(x, y) then
+  --     ui_box:select()
+  --     break
+  --   end
+  -- end
 
   if clicked_powerup then
     game.collider:remove(clicked_powerup._physics_body)
@@ -96,10 +107,6 @@ end
 function Main:keypressed(key, unicode)
   if self.item_boxes[tonumber(key)] then
     self.item_boxes[tonumber(key)]:select()
-  else
-    local w,h = love.graphics.getMode()
-    local new_sperm = Sperm:new(r(w), r(h), 10)
-    self.sperm[new_sperm.id] = new_sperm
   end
 end
 
@@ -152,20 +159,24 @@ function Main:ui_overlay()
     g.draw(self.active_item, 0, 0)
   end
 
+  g.setColor(COLORS.WHITE:rgb())
+  g.print(self.staples, g.getWidth() - 80, 0)
+  g.print("Score: " .. math.round(self.score), 0, 0)
+
 
   -- g.circle("fill", g.getWidth(), 0, 95 - 10)
 
   -- bottom boxes
-  for i,ui_box in ipairs(self.item_boxes) do
-    ui_box:render()
-  end
+  -- for i,ui_box in ipairs(self.item_boxes) do
+  --   ui_box:render()
+  -- end
 end
 
 function Main:game_over_overlay()
   g.setColor(0,0,0,255/2)
   g.rectangle('fill', 0,0,g.getWidth(), g.getHeight())
   g.setColor(255,255,255,255)
-  local text = "You got the bitch pregnant. Fuck, man."
+  local text = "You got pregnant. Oh no!"
   local offset = self.font:getWidth(text) / 2
   g.print(text, g.getWidth() / 2 - offset, g.getHeight() / 2)
 end

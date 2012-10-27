@@ -19,13 +19,18 @@ function Staple:effect()
   local targets, target = {}, nil
 
   for id,sperm in pairs(game.sperm) do
-    table.insert(targets, sperm)
+    if sperm.stapled ~= true then
+      table.insert(targets, sperm)
+    end
   end
 
-  target = targets[r(#targets)]
-  target.stapled = true
+  if #targets > 0 and game.staples > 0 then
+    target = targets[r(#targets)]
+    target.stapled = true
+    game.staples = game.staples - 1
 
-  cron.after(5, function()
-    target.stapled = false
-  end)
+    cron.after(5, function()
+      target.stapled = false
+    end)
+  end
 end

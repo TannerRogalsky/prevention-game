@@ -31,7 +31,10 @@ function UIBox:select()
       ui_box.outline_color = COLORS.WHITE
     end
   end
-  self:clicked_callback()
+
+  if type(self.clicked_callback) == "function" then
+    self:clicked_callback()
+  end
 end
 
 function UIBox:on_collide(dt, shape_one, shape_two, mtv_x, mtv_y)
