@@ -28,30 +28,12 @@ globalID = 0
 function generateID() globalID = globalID + 1 return globalID end
 
 -- Put any game-wide requirements in here
-require 'lib/middleclass'
-Stateful = require 'lib/stateful'
-skiplist = require "lib/skiplist"
-HC = require 'lib/HardonCollider'
-inspect = require 'lib/inspect'
-require 'lib/AnAL'
-cron = require 'lib/cron'
+-- require 'lib/middleclass'
+-- Stateful = require 'lib/stateful'
+-- skiplist = require "lib/skiplist"
+-- HC = require 'lib/HardonCollider'
+-- inspect = require 'lib/inspect'
+-- require 'lib/AnAL'
+-- cron = require 'lib/cron'
 
-require 'base'
-require 'game'
-require 'egg'
-require 'sperm'
-require 'power_up'
-require 'ui_box'
-
-require 'powerups/staple'
-require 'powerups/confusion'
-require 'powerups/wall'
-require 'powerups/bubble'
-require 'powerups/slow'
-require 'powerups/decoy'
-PowerUp.static.TYPES = {Staple, Confusion, Wall, Bubble, Slow, Decoy}
-
-require 'states/loading'
-require 'states/main'
-require 'states/menu'
-require 'states/game_over'
+-- require 'base'
