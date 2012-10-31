@@ -1,3 +1,3 @@
-Love2D Template
+Prevention
 ===
-This is a template that is meant to be appropriate for any Love2D game. It includes some structure, helpers and libraries.
+A game by Tanner Rogalsky and Chris Baragar. Made with Moai and Lua.
