@@ -19,8 +19,6 @@ function Game:initialize()
   self.fps_textbox:setFont(font)
   self.fps_textbox:setTextSize(20)
   self.fps_textbox:setRect(-SCREEN_WIDTH/2, -SCREEN_HEIGHT/2, SCREEN_WIDTH/2, SCREEN_HEIGHT/2)
-  -- self.fps_textbox:setLoc(10, 0)
-  -- self.fps_textbox:setAlignment(MOAITextBox.RIGHT_JUSTIFY)
   self.fps_textbox:setYFlip(true)
   self.fps_textbox:setColor(COLORS.GREEN:rgb())
   self.ui_layer:insertProp(self.fps_textbox)
@@ -33,30 +31,24 @@ function Game:initialize()
   self.background:setDeck(background_image)
 
   self.action_layer:insertProp(self.background)
-
-  -- local scriptDeck = MOAIScriptDeck.new()
-  -- scriptDeck:setRect(-720/2, -1280/2, 720/2, 1280/2)
-  -- scriptDeck:setDrawCallback(function(index,xOff,yOff,xFlip,yFlip)
-  --   MOAIGfxDevice.setPenColor(COLORS.RED:rgb())
-  --   -- MOAIGfxDevice.setPenWidth(3)
-  --   -- MOAIDraw.fillCircle(SCREEN_WIDTH/2, SCREEN_HEIGHT/2, 50, 20)
-  --   MOAIDraw.fillFan(SCREEN_WIDTH/2,SCREEN_HEIGHT/2, 0,SCREEN_HEIGHT/2, 0,0)
-  -- end)
-
-  -- local prop = MOAIProp2D.new()
-  -- prop:setDeck(scriptDeck)
-  -- self.ui_layer:insertProp(prop)
 end
 
 function Game:update(dt)
   self.fps_textbox:setString("FPS: " .. math.round(MOAISim.getPerformance()))
-  self.egg:update(dt)
+
+  if self.egg then
+    self.egg:update(dt)
+  end
 end
 
-function Game:mousepressed(x, y, button)
+function Game:mouse_pressed(x, y, button)
+  self.egg = Egg:new(0,0,6)
+  self.action_layer:insertProp(self.egg.sprite)
 end
 
-function Game:mousereleased(x, y, button)
+function Game:mouse_released(x, y, button)
+  self.action_layer:removeProp(self.egg.sprite)
+  self.egg = nil
 end
 
 -- function Game:keypressed(key, unicode)

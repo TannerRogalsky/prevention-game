@@ -5,35 +5,33 @@ function Egg:initialize(x, y, radius)
   Base.initialize(self)
 
   -- load the sprite sheet; this will be the source for our sprite
+  local start_index, stop_index = 1, 10
   local spriteSheet = MOAITileDeck2D.new ()
   spriteSheet:setTexture("images/egg.png") -- load a texture
-  spriteSheet:setSize(10, 1)
+  spriteSheet:setSize(stop_index, 1)
   spriteSheet:setRect(-radius, -radius, radius, radius) -- set the world space dimensions of the sprites
 
   -- create a sprite and initialize it
   self.sprite = MOAIProp2D.new()
   self.sprite:setDeck(spriteSheet)
 
-  local start_index, stop_index = 1, 10
-  local step = start_index/stop_index
-
   -- create the animation curve
   local anim_curve = MOAIAnimCurve.new()
-  local time = 1
-  local index_count = stop_index - start_index + 2
-  anim_curve:reserveKeys(index_count)
+  anim_curve:reserveKeys(stop_index)
+
+  local time_to_run = 2
+  local step = time_to_run/stop_index
+
   -- loop through each frame over time
   for index = start_index, stop_index do
-          anim_curve:setKey(time, step*(time-1), index, MOAIEaseType.FLAT)
-          time = time + 1
-        end
-  -- add the last frame (to time it right)
-  anim_curve:setKey(time, step*(time-1), stop_index, MOAIEaseType.FLAT)
+    -- index is 1-indexed but time is 0-indexed
+    anim_curve:setKey(index, step * (index - 1), index, MOAIEaseType.FLAT)
+  end
 
   local anim = MOAIAnim:new()
   anim:reserveLinks(1)
   anim:setLink(1, anim_curve, self.sprite, MOAIProp.ATTR_INDEX)
-  anim:setMode(MOAITimer.LOOP)
+  anim:setMode(MOAITimer.PING_PONG)
 
   self.sprite:setIndex(start_index)
   anim:start()
