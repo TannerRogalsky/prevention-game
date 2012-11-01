@@ -71,5 +71,6 @@ Stateful = require 'lib/stateful'
 require 'base'
 require 'game'
 require 'egg'
+require 'sperm'
 
 require 'states.main'

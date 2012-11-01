@@ -31,6 +31,8 @@ function Game:initialize()
   self.background:setDeck(background_image)
 
   self.action_layer:insertProp(self.background)
+
+  self.sperm = {}
 end
 
 function Game:update(dt)

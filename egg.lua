@@ -37,13 +37,22 @@ function Egg:initialize(x, y, radius)
 
   self.sprite:setIndex(start_index)
   anim:start()
+
+  local tx, ty = self.sprite:getLoc()
+  local sx, sy = game.sperm.sprite:getLoc()
+  local angle = math.angle(sx, sy, tx, ty) - 90
+  game.sperm.sprite:seekRot(angle, 1)
+
+  local driver = MOAIEaseDriver.new()
+  driver:reserveLinks(2)
+  driver:setLink(1, game.sperm.sprite, MOAITransform.ATTR_X_LOC, self.sprite, MOAITransform.ATTR_X_LOC)
+  driver:setLink(2, game.sperm.sprite, MOAITransform.ATTR_Y_LOC, self.sprite, MOAITransform.ATTR_Y_LOC)
+  driver:setSpan(3)
+  driver:start()
 end
 
 function Egg:update(dt)
   self.time_alive = self.time_alive + dt
-  self.sprite:addScl(dt * math.pow(self.time_alive, Egg.GROWTH_EXPONENT))
-end
 
-function Egg:grow(dt)
-  -- self.radius = self.start_radius + math.pow(self.alive, Egg.GROWTH_EXPONENT)
+  self.sprite:addScl(dt * math.pow(self.time_alive, Egg.GROWTH_EXPONENT))
 end

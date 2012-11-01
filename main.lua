@@ -6,6 +6,8 @@ MOAISim.openWindow("Prevention", SCREEN_WIDTH, SCREEN_HEIGHT )
 MOAIGfxDevice.setClearColor(1,1,1,1)
 
 game = Game:new()
+game.sperm = Sperm:new(0, 0, 20)
+game.action_layer:insertProp(game.sperm.sprite)
 
 do
   mainThread = MOAICoroutine.new ()
@@ -15,6 +17,7 @@ do
       local dt = MOAISim.getStep()
 
       game:update(dt)
+      game.sperm:update(dt)
     end
   end)
 end
