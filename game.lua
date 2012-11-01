@@ -42,13 +42,18 @@ function Game:update(dt)
 end
 
 function Game:mouse_pressed(x, y, button)
-  self.egg = Egg:new(0,0,6)
-  self.action_layer:insertProp(self.egg.sprite)
+  if self.egg == nil then
+    local x, y = self.action_layer:wndToWorld(x,y)
+    self.egg = Egg:new(x, y, 6)
+    self.action_layer:insertProp(self.egg.sprite)
+  end
 end
 
 function Game:mouse_released(x, y, button)
-  self.action_layer:removeProp(self.egg.sprite)
-  self.egg = nil
+  if self.egg then
+    self.action_layer:removeProp(self.egg.sprite)
+    self.egg = nil
+  end
 end
 
 -- function Game:keypressed(key, unicode)

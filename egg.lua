@@ -4,6 +4,10 @@ Egg.static.GROWTH_EXPONENT = 2
 function Egg:initialize(x, y, radius)
   Base.initialize(self)
 
+  self.sprite = MOAIProp2D.new()
+  self.sprite:setLoc(x, y)
+  self.time_alive = 0
+
   -- load the sprite sheet; this will be the source for our sprite
   local start_index, stop_index = 1, 10
   local spriteSheet = MOAITileDeck2D.new ()
@@ -11,15 +15,13 @@ function Egg:initialize(x, y, radius)
   spriteSheet:setSize(stop_index, 1)
   spriteSheet:setRect(-radius, -radius, radius, radius) -- set the world space dimensions of the sprites
 
-  -- create a sprite and initialize it
-  self.sprite = MOAIProp2D.new()
   self.sprite:setDeck(spriteSheet)
 
   -- create the animation curve
   local anim_curve = MOAIAnimCurve.new()
   anim_curve:reserveKeys(stop_index)
 
-  local time_to_run = 2
+  local time_to_run = 1
   local step = time_to_run/stop_index
 
   -- loop through each frame over time
@@ -38,7 +40,8 @@ function Egg:initialize(x, y, radius)
 end
 
 function Egg:update(dt)
-  self.sprite:addScl(dt)
+  self.time_alive = self.time_alive + dt
+  self.sprite:addScl(dt * math.pow(self.time_alive, Egg.GROWTH_EXPONENT))
 end
 
 function Egg:grow(dt)

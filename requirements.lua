@@ -21,6 +21,7 @@ function math.clamp(low, n, high) return math.min(math.max(low, n), high) end
 function math.dist(x1, y1, x2, y2) return math.sqrt(math.pow(x2 - x1, 2) + math.pow(y2 - y1, 2)) end
 function pointInCircle(circle, point) return (point.x-circle.x)^2 + (point.y - circle.y)^2 < circle.radius^2 end
 function string:split(sep) return self:match((self:gsub("[^"..sep.."]*"..sep, "([^"..sep.."]*)"..sep))) end
+function math.angle(x1, y1, x2, y2) return math.deg(math.atan2(y2 - y1, x2 - x1)) end
 globalID = 0
 function generateID() globalID = globalID + 1 return globalID end
 
