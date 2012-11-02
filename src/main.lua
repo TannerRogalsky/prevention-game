@@ -1,7 +1,7 @@
 require('requirements')
 
+SCREEN_WIDTH, SCREEN_HEIGHT = MOAIEnvironment.screenWidth or 720, MOAIEnvironment.screenHeight or 1280
 SCREEN_UNITS_X, SCREEN_UNITS_Y = 720, 1280
-SCREEN_WIDTH, SCREEN_HEIGHT = SCREEN_UNITS_X, SCREEN_UNITS_Y
 MOAISim.openWindow("Prevention", SCREEN_WIDTH, SCREEN_HEIGHT )
 MOAIGfxDevice.setClearColor(1,1,1,1)
 
