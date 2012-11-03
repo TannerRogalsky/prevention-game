@@ -32,6 +32,29 @@ function Game:initialize()
 
   self.action_layer:insertProp(self.background)
 
+  local curve = MOAIAnimCurve.new()
+  curve:reserveKeys(2)
+  curve:setKey(1, 0, 256, MOAIEaseType.EASE_IN)
+  curve:setKey(2, 256, 100)
+
+  local curve2 = MOAIAnimCurve.new()
+  curve2:reserveKeys(2)
+  curve2:setKey(1, 0, 256, MOAIEaseType.EASE_IN)
+  curve2:setKey(2, 256, 100)
+
+  local scriptDeck = MOAIScriptDeck.new()
+  scriptDeck:setRect(-SCREEN_UNITS_X/2, -SCREEN_UNITS_Y/2, SCREEN_UNITS_X/2, SCREEN_UNITS_Y/2)
+  scriptDeck:setDrawCallback(function(index, xOff, yOff, xFlip, yFlip)
+    MOAIGfxDevice.setPenColor(1, 0, 0, 1)
+    MOAIDraw.drawAnimCurve(curve, 100)
+    MOAIGfxDevice.setPenColor(1, 1, 0, 1)
+    MOAIDraw.drawAnimCurve(curve2, 4)
+  end)
+
+  local points_indicator = MOAIProp2D.new()
+  points_indicator:setDeck(scriptDeck)
+  self.ui_layer:insertProp(points_indicator)
+
   self.sperm = {}
 end
 
