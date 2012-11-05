@@ -52,6 +52,12 @@ function draw_circle(center_x, center_y, radius)
     if x > y then break end
   end
 
+  -- for _,octant in ipairs(octants) do
+  --   for _,coords in ipairs(octant) do
+  --     print(unpack(coords))
+  --   end
+  -- end
+
   return octants
 end
 
@@ -63,10 +69,8 @@ font:loadFromTTF("fonts/arialbd.ttf", "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNO
 require 'lib/middleclass'
 Stateful = require 'lib/stateful'
 -- skiplist = require "lib/skiplist"
--- HC = require 'lib/HardonCollider'
 -- inspect = require 'lib/inspect'
--- require 'lib/AnAL'
--- cron = require 'lib/cron'
+cron = require 'lib/cron'
 
 require 'base'
 require 'game'
