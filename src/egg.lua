@@ -20,6 +20,7 @@ function Egg:initialize(x, y, radius)
   -- create the animation curve
   local anim_curve = MOAIAnimCurve.new()
   anim_curve:reserveKeys(stop_index)
+  anim_curve:setWrapMode(MOAIAnimCurve.APPEND)
 
   local time_to_run = 1
   local step = time_to_run/stop_index
